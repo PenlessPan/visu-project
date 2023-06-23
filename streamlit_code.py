@@ -1,6 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import MinMaxScaler
 import streamlit as st
 import os
 df = pd.read_csv('./dog_breeds.csv')
@@ -13,11 +12,20 @@ attributes['life_expectancy'] = (df['max_life_expectancy'] + df['min_life_expect
 attributes['Protectiveness'] = df['protectiveness']
 
 temp = pd.DataFrame()
-temp['height'] = ((df['max_height_male'] + df['min_height_male']) / 2 + (df['max_height_female'] + df['min_height_female']) / 2) / 2
-temp['weight'] = ((df['max_weight_male'] + df['min_weight_male']) / 2 + (df['max_weight_female'] + df['min_weight_female']) / 2) / 2
+temp['height'] = ((df['max_height_male'] + df['min_height_male']) / 2 + (
+            df['max_height_female'] + df['min_height_female']) / 2) / 2
+temp['weight'] = ((df['max_weight_male'] + df['min_weight_male']) / 2 + (
+            df['max_weight_female'] + df['min_weight_female']) / 2) / 2
 temp['coat_length'] = df['coat_length']
-scaler = MinMaxScaler()
-temp[['height', 'weight', 'coat_length']] = (scaler.fit_transform(temp[['height', 'weight', 'coat_length']]) * 4) + 1
+
+
+def scaler(col):
+    return (col - col.min()) / (col.max() - col.min())
+
+
+temp['height'] = (scaler(temp['height']) * 4) + 1
+temp['weight'] = (scaler(temp['weight']) * 4) + 1
+temp['coat_length'] = (scaler(temp['coat_length']) * 4) + 1
 
 attributes['Appearance'] = (temp['height'] + temp['weight'] + temp['coat_length']) / 3
 
