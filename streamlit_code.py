@@ -186,7 +186,7 @@ if os.path.exists(selected_breed_image_path):
 else:
     st.write(selected_breed)
 
-selected_breed_attributes = get_breed_attributes(selected_breed)
+# selected_breed_attributes = get_breed_attributes(selected_breed)
 
 # Spider plot
 theta = radar_factory(6)
