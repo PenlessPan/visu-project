@@ -104,6 +104,7 @@ def radar_factory(num_vars, frame='polygon'):
 df = pd.read_csv('./dog_breeds.csv')
 df = df.drop(df[df['drooling'] == 0].index, inplace=False)
 attributes = pd.DataFrame()
+attributes['Name'] = df['Name']
 attributes['Maintenance'] = (df['shedding'] + df['grooming'] + df['drooling'] + df['trainability'] + df['barking']) / 5
 attributes['Friendliness'] = (df['good_with_children'] + df['good_with_other_dogs'] + df['good_with_strangers']) / 3
 attributes['Energy'] = (df['energy'] + df['playfulness']) / 2
