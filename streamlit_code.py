@@ -50,40 +50,39 @@ def filter_breeds(data, attribute_filters):
     mask = (data >= attribute_filters[:, 0]) & (data <= attribute_filters[:, 1])
     return data[mask.all(axis=1)]
 
-# Sidebar - Breed Selection
-st.sidebar.title("Dog Breed Selection")
+# Prepare data for visualization
+attribute_data = df[attribute_names]
+
+# Breed Selection
+st.title("Dog Breed Selection")
 
 # Display the dog breed table
-st.sidebar.subheader("Dog Breed Table")
-breed_selected = st.sidebar.selectbox("Select a breed", df['Name'])
+st.subheader("Dog Breed Table")
+breed_table = df[['Name']].copy()
+breed_table['Image'] = breed_table['Name'].apply(lambda x: os.path.join(img_dir, x + ".png"))
+breed_table['Image'] = breed_table['Image'].apply(lambda x: f'<img src="{x}" width="100">')
+st.write(breed_table.to_html(escape=False), unsafe_allow_html=True)
 
-# Display the selected breed image
-image_path = os.path.join(img_dir, breed_selected + ".png")
-if os.path.exists(image_path):
-    st.sidebar.image(image_path, use_column_width=True)
-else:
-    st.sidebar.info("Image not found for selected breed.")
-
-# Sidebar - Attribute Filters
-st.sidebar.subheader("Attribute Filters")
+# Attribute Filters
+st.subheader("Attribute Filters")
 
 # Initialize attribute filters
 attribute_filters = {}
 for attribute in attribute_names:
     min_val, max_val = attribute_ranges[attribute]
-    attribute_filters[attribute] = st.sidebar.slider(attribute, min_val, max_val, [min_val, max_val])
+    attribute_filters[attribute] = st.slider(attribute, min_val, max_val, [min_val, max_val])
 
 # Apply filters and get the filtered breeds
-filtered_breeds = filter_breeds(attributes, list(attribute_filters.values()))
+filtered_breeds = filter_breeds(attribute_data, list(attribute_filters.values()))
 
-# Main page - Spyder plot and enlarged image
+# Spyder plot and enlarged image
 st.title("Dog Breed Selection System")
 
 # Display the spyder plot
 st.subheader("Dog Breed Attributes")
 fig, ax = plt.subplots()
 for breed in filtered_breeds.index:
-    breed_attributes = attributes.loc[breed]
+    breed_attributes = attribute_data.loc[breed]
     breed_attributes = breed_attributes.append(breed_attributes[:1])  # Complete the loop
     ax.plot(breed_attributes.values, marker='o', label=breed)
 ax.set_xticks(range(len(attribute_names)))
@@ -104,7 +103,7 @@ st.title("Dog Breed Attribute Filtering")
 # Display a separate page with tabs for each attribute
 for attribute in attribute_names:
     st.subheader(attribute)
-    filtered_breeds = filter_breeds(attributes, [attribute_filters[attribute]])
+    filtered_breeds = filter_breeds(attribute_data, [attribute_filters[attribute]])
     filtered_breeds_names = filtered_breeds.index
     st.write(filtered_breeds_names)
 
@@ -114,7 +113,7 @@ st.title("Breed Comparison")
 # Display the stacked bar plot for the filtered breeds
 st.subheader("Filtered Dog Breeds Comparison")
 fig, ax = plt.subplots()
-filtered_breed_attributes = attributes.loc[filtered_breeds_names]
+filtered_breed_attributes = attribute_data.loc[filtered_breeds_names]
 filtered_breed_attributes.plot(kind='bar', stacked=True, ax=ax)
 ax.set_xticklabels(filtered_breeds_names, rotation=45)
 st.pyplot(fig)
@@ -127,9 +126,6 @@ for breed in filtered_breeds_names:
         st.image(breed_image_path, caption=breed, width=100)
     else:
         st.write(breed)
-
-
-
 
 
 
