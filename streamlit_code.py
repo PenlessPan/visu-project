@@ -193,10 +193,11 @@ theta = radar_factory(6)
 data = list(attributes.loc[attributes['Name'] == "Beagle"].drop(['Name'], axis=1).iloc[0])
 vals = attributes.drop(['Name'], axis=1)
 attribute_names = list(vals.columns)
-fig, axs = plt.subplots(figsize=(3, 3), nrows=1, ncols=1,
+fig, ax = plt.subplots(figsize=(3, 3), nrows=1, ncols=1,
                         subplot_kw=dict(projection='radar'))
-axs.plot(theta, data)
-axs.fill(theta, data, alpha=0.45)
-axs.set_varlabels(attribute_names)
-st.pyplot(fig)
+ax.plot(theta, data)
+ax.fill(theta, data, alpha=0.45)
+ax.set_rgrids([1, 2, 3, 4, 5])
+ax.set_varlabels(attribute_names)
+fig
 
