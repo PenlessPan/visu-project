@@ -45,88 +45,57 @@ attribute_ranges = {
     'Appearance': [1, 5]
 }
 
-# Filter breeds based on attribute thresholds
-def filter_breeds(data, attribute_filters):
-    mask = (data >= attribute_filters[:, 0]) & (data <= attribute_filters[:, 1])
-    return data[mask.all(axis=1)]
-
 # Prepare data for visualization
+breed_names = df['Name'].tolist()
 attribute_data = attributes
 
-# Breed Selection
-st.title("Dog Breed Selection")
+# Function to get the breed image path
+def get_breed_image_path(breed_name):
+    return os.path.join(img_dir, breed_name + ".png")
 
-# Display the dog breed table
-st.subheader("Dog Breed Table")
-breed_table = df[['Name']].copy()
-breed_table['Image'] = breed_table['Name'].apply(lambda x: os.path.join(img_dir, x + ".png"))
-breed_table['Image'] = breed_table['Image'].apply(lambda x: f'<img src="{x}" width="100">')
-st.write(breed_table.to_html(escape=False), unsafe_allow_html=True)
+# Function to get the breed attributes
+def get_breed_attributes(breed_name):
+    return attribute_data.loc[df['Name'] == breed_name].squeeze()
 
-# Attribute Filters
-st.subheader("Attribute Filters")
-
-# Initialize attribute filters
-attribute_filters = {}
-for attribute in attribute_names:
-    min_val, max_val = attribute_ranges[attribute]
-    attribute_filters[attribute] = st.slider(attribute, min_val, max_val, [min_val, max_val])
-
-# Apply filters and get the filtered breeds
-filtered_breeds = filter_breeds(attribute_data, list(attribute_filters.values()))
-
-# Spyder plot and enlarged image
+# Main page - Dog breed table
 st.title("Dog Breed Selection System")
 
-# Display the spyder plot
-st.subheader("Dog Breed Attributes")
+# Display the dog breed table
+table_rows = []
+for breed_name in breed_names:
+    breed_image_path = get_breed_image_path(breed_name)
+    breed_attributes = get_breed_attributes(breed_name)
+    table_rows.append((breed_name, breed_image_path, breed_attributes))
+
+table_cols = st.columns(4)
+for breed_name, breed_image_path, _ in table_rows:
+    with table_cols[0]:
+        if os.path.exists(breed_image_path):
+            st.image(breed_image_path, caption=breed_name, width=100)
+        else:
+            st.write(breed_name)
+    with table_cols[1]:
+        st.write("")
+
+# Enlarged picture and spider plot for the last clicked breed
+selected_breed = st.selectbox("Select a breed", breed_names)
+
+selected_breed_image_path = get_breed_image_path(selected_breed)
+if os.path.exists(selected_breed_image_path):
+    st.image(selected_breed_image_path, caption=selected_breed, width=200)
+else:
+    st.write(selected_breed)
+
+selected_breed_attributes = get_breed_attributes(selected_breed)
+
+# Spider plot
 fig, ax = plt.subplots()
-for breed in filtered_breeds.index:
-    breed_attributes = attribute_data.loc[breed]
-    breed_attributes = breed_attributes.append(breed_attributes[:1])  # Complete the loop
-    ax.plot(breed_attributes.values, marker='o', label=breed)
+selected_breed_attributes = selected_breed_attributes.append(selected_breed_attributes[:1])  # Complete the loop
+ax.plot(selected_breed_attributes.values, marker='o')
+ax.fill(selected_breed_attributes.values, alpha=0.3)
 ax.set_xticks(range(len(attribute_names)))
 ax.set_xticklabels(attribute_names)
-ax.legend(loc='upper right')
 st.pyplot(fig)
-
-# Display the enlarged image of the selected breed
-st.subheader("Selected Breed Image")
-if os.path.exists(image_path):
-    st.image(image_path, use_column_width=True)
-else:
-    st.info("Image not found for selected breed.")
-
-# Separate page for attribute filtering
-st.title("Dog Breed Attribute Filtering")
-
-# Display a separate page with tabs for each attribute
-for attribute in attribute_names:
-    st.subheader(attribute)
-    filtered_breeds = filter_breeds(attribute_data, [attribute_filters[attribute]])
-    filtered_breeds_names = filtered_breeds.index
-    st.write(filtered_breeds_names)
-
-# Page for breed comparison
-st.title("Breed Comparison")
-
-# Display the stacked bar plot for the filtered breeds
-st.subheader("Filtered Dog Breeds Comparison")
-fig, ax = plt.subplots()
-filtered_breed_attributes = attribute_data.loc[filtered_breeds_names]
-filtered_breed_attributes.plot(kind='bar', stacked=True, ax=ax)
-ax.set_xticklabels(filtered_breeds_names, rotation=45)
-st.pyplot(fig)
-
-# Display breed names and pictures above the graph
-st.subheader("Filtered Dog Breeds")
-for breed in filtered_breeds_names:
-    breed_image_path = os.path.join(img_dir, breed + ".png")
-    if os.path.exists(breed_image_path):
-        st.image(breed_image_path, caption=breed, width=100)
-    else:
-        st.write(breed)
-
 
 
 
