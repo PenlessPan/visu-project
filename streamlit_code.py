@@ -51,7 +51,7 @@ def filter_breeds(data, attribute_filters):
     return data[mask.all(axis=1)]
 
 # Prepare data for visualization
-attribute_data = df[attribute_names]
+attribute_data = attributes
 
 # Breed Selection
 st.title("Dog Breed Selection")
