@@ -136,6 +136,7 @@ def display_dog_table(df):
             col.image(image_path, width=100)
             fig = plot_spider(df, breed_selected)
             col.pyplot(fig)
+    st.write(os.listdir())
     st.write(os.path.isfile(r"..\dog_pics\Afghan Hound.png"))
     # Create a grid layout with two columns
     table_container = st.container()
