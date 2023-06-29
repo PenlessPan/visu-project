@@ -127,11 +127,12 @@ def filter_and_compare(df):
         fig = stacked_bar_plot(filtered_df)
         st.plotly_chart(fig)
         "Dog images for reference:"
+        dogs_per_row = 3
         columns_num_def = []
         total_dogs = len(filtered_df)
-        while total_dogs-6 > 0:
-            columns_num_def.append(6)
-            total_dogs -= 6
+        while total_dogs - dogs_per_row > 0:
+            columns_num_def.append(dogs_per_row)
+            total_dogs -= dogs_per_row
         _ = columns_num_def.append(total_dogs) if total_dogs > 0 else None
         dog_idx = 0
         for i in range(len(columns_num_def)):
