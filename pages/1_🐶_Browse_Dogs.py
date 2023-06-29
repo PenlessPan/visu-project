@@ -133,7 +133,7 @@ def display_dog_table(df):
             col.markdown("# Breed Details")
             # breed_selected = col.selectbox("Select a breed:", df)
             image_path = fr"dog_pics/{breed_selected}.png"
-            col.image(image_path, width=100)
+            col.image(image_path, width=300)
             fig = plot_spider(df, breed_selected)
             col.pyplot(fig)
     st.write(os.listdir('dog_pics'))
@@ -147,7 +147,7 @@ def display_dog_table(df):
             breed_columns = st.columns(num_columns)
             for breed, column in zip(breed_row, breed_columns):
                 image_path = fr"dog_pics/{breed}.png"
-                column.image(image_path, width=300)
+                column.image(image_path, width=100)
                 column.button(breed, on_click=show_stats, args=(breed,))
     breed_details_container = st.container()
     breed_details_container.markdown(
