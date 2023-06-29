@@ -135,6 +135,7 @@ def filter_and_compare(df):
             total_dogs -= dogs_per_row
         _ = columns_num_def.append(total_dogs) if total_dogs > 0 else None
         dog_idx = 0
+        filtered_df = filtered_df.sort_values("Total", ascending=False)
         for i in range(len(columns_num_def)):
             cols = st.columns(columns_num_def[i])
             for col in cols:
