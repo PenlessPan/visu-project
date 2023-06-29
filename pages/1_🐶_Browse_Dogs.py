@@ -11,7 +11,7 @@ import numpy as np
 
 st.set_page_config(page_title="Meet Our Dogs!", layout="wide")
 df = pd.read_csv(
-    r"..\dog_attributes.csv")
+    "../dog_attributes.csv")
 
 # Function to create spider plots
 def radar_factory(num_vars, frame='polygon'):
