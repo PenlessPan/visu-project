@@ -144,8 +144,8 @@ def display_dog_table(df):
             breed_columns = st.columns(num_columns)
             for breed, column in zip(breed_row, breed_columns):
                 image_path = fr"dog_pics/{breed}.png"
-                column.image(image_path, width=100)
-                column.button(breed, on_click=show_stats, args=(breed,))
+                column.image(image_path, use_column_width=True)
+                column.button(breed, on_click=show_stats, args=(breed,), use_container_width=True)
     breed_details_container = st.container()
     breed_details_container.markdown(
         """
