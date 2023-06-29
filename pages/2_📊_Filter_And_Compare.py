@@ -141,7 +141,7 @@ def filter_and_compare(df):
             for col in cols:
                 dog = filtered_df.iloc[dog_idx]["Name"]
                 image_path = fr"dog_pics/{dog}.png"
-                col.image(image_path, caption=dog, width=150)
+                col.image(image_path, caption=dog, use_column_width=True)
                 dog_idx += 1
 
         # for i in range(0, len(filtered_df), 6):
