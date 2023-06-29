@@ -8,6 +8,7 @@ from matplotlib.projections.polar import PolarAxes
 from matplotlib.spines import Spine
 from matplotlib.projections import register_projection
 import numpy as np
+import os
 
 st.set_page_config(page_title="Meet Our Dogs!", layout="wide")
 df = pd.read_csv(r"dog_attributes.csv")
@@ -135,7 +136,7 @@ def display_dog_table(df):
             col.image(image_path, width=100)
             fig = plot_spider(df, breed_selected)
             col.pyplot(fig)
-
+    st.write(os.path.isfile("dog_pics\Afghan Hound.png")
     # Create a grid layout with two columns
     table_container = st.container()
     # Display the table with dog breed images and names
