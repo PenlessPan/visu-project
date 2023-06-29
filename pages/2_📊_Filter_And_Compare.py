@@ -107,5 +107,5 @@ def filter_and_compare(df):
         fig = stacked_bar_plot(filtered_df)
         st.plotly_chart(fig)
 
-attributes = pd.read_csv(r"D:\Users\yaniv\OneDrive - post.bgu.ac.il\studies\university\Information Visualization\project\Project Code\dog_attributes.csv")
+attributes = pd.read_csv(r".\dog_attributes.csv")
 filter_and_compare(attributes)
