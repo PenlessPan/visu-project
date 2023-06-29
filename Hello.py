@@ -1,8 +1,8 @@
 import streamlit as st
-
+import os
 st.set_page_config(page_title="Welcome to Dogly!", layout="centered")
-
-image_path = r".\homepage.jpg"
+print(os.path.isfile('homepage.jpg'))
+image_path = r"homepage.jpg"
 st.image(image_path)
 
 # col1, col2, col3 = st.columns([1, 3, 1])
