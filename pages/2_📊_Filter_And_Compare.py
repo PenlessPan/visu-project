@@ -149,7 +149,7 @@ def filter_and_compare(df):
         for i in range(len(columns_num_def)):
             if columns_num_def[i] == 1:
                 dog = filtered_df.iloc[dog_idx]["Name"]
-                image_path = origin_path + fr"dog_pics\{dog}.png"
+                image_path = origin_path + fr"dog_pics/{dog}.png"
                 st.columns([1, 1, 1])[1].image(image_path, caption=dog, use_column_width=True)
                 image_path = fr"dog_pics/{dog}.png"
                 col.image(image_path, caption=dog, use_column_width=True)
@@ -157,17 +157,17 @@ def filter_and_compare(df):
             elif columns_num_def[i] == 2:
                 cols = st.columns([1, 3, 1, 3, 1])
                 dog = filtered_df.iloc[dog_idx]["Name"]
-                image_path = origin_path + fr"dog_pics\{dog}.png"
+                image_path = origin_path + fr"dog_pics/{dog}.png"
                 cols[1].image(image_path, caption=dog, use_column_width=True)
                 dog_idx += 1
                 dog = filtered_df.iloc[dog_idx]["Name"]
-                image_path = origin_path + fr"dog_pics\{dog}.png"
+                image_path = origin_path + fr"dog_pics/{dog}.png"
                 cols[3].image(image_path, caption=dog, use_column_width=True)
             else:
                 cols = st.columns(columns_num_def[i])
                 for col in cols:
                     dog = filtered_df.iloc[dog_idx]["Name"]
-                    image_path = origin_path + fr"dog_pics\{dog}.png"
+                    image_path = origin_path + fr"dog_pics/{dog}.png"
                     col.image(image_path, caption=dog, use_column_width=True)
                     dog_idx += 1
 
