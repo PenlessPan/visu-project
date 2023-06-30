@@ -146,7 +146,7 @@ def display_dog_table(df):
         #         col.markdown("# Breed Details")
         #         image_path = origin_path + fr"dog_pics/{breed_selected}.png"
         #         col.image(image_path, width=500)
-        st.markdown("# Breed Details")
+        breed_details_container.markdown("# Breed Details")
         # breed_selected = col.selectbox("Select a breed:", df)
         image_path = origin_path + fr"dog_pics/{breed_selected}.png"
         img_col.image(image_path, caption=breed_selected, use_column_width=True)
