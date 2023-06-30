@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import plotly.graph_objs as go
 import plotly.express as px
 
@@ -8,7 +7,7 @@ origin_path = r"D:/Users/yaniv/OneDrive - post.bgu.ac.il/studies/university/Info
 origin_path = ""
 
 st.set_page_config(page_title="Filter and Compare")
-if not st.session_state:
+if st.session_state.get('Size') is None:
     st.session_state['Friendliness'] = (1, 5)
     st.session_state['Energy'] = (1, 5)
     st.session_state['Protectiveness'] = (1, 5)
@@ -63,13 +62,14 @@ def stacked_bar_plot(df):
     fig.update_layout(
         barmode='stack',
         yaxis=dict(range=[0, 30]),
-        title="Comparison of Dog Breeds by Attributes",
+        title="Comparison of Your Ideal Breeds by Their Attributes",
         xaxis_title="Dog Breeds",
         yaxis_title="Attribute Score",
         legend_title="Attributes"
     )
 
     return fig
+
 
 def lollipop_plot(df, attribute: str):
     ordered_df = df.sort_values(by=attribute)
@@ -109,7 +109,7 @@ def lollipop_plot(df, attribute: str):
 
 # Step 2 and 3: Filter dog breeds and display stacked bar plot
 def filter_and_compare(df):
-    st.markdown("# Step 2: Filter Dog Breeds")
+    st.markdown("# Filter Dog Breeds")
     filtered_df = df.copy()
     # Display attribute tabs with selectbox for choosing lollipop plots
     attribute_names = list(df.columns)
@@ -128,10 +128,8 @@ def filter_and_compare(df):
     st.markdown("")
 
     # for attribute in attribute_names:
-    #     f"{attribute}: {list(st.session_state[attribute])}"
     left, right = st.columns(2)
     selected_attribute = right.selectbox("Select Attribute:", attribute_names)
-    # st.markdown(f"# {selected_attribute}")
     min_val, max_val = left.slider("Choose your preference on a scale of 1 to 5:", key=selected_attribute, min_value=1,
                                    max_value=5,
                                    value=st.session_state[selected_attribute])
@@ -166,7 +164,7 @@ def filter_and_compare(df):
 
     # Perform comparison and display stacked bar plot
     if compare_button:
-        st.markdown("# Step 3: Compare Dog Breeds")
+        st.markdown("# Comparing Dog Breeds")
         # Display stacked bar plot using the filtered dataframe
         fig = stacked_bar_plot(filtered_df)
         st.plotly_chart(fig)
@@ -202,7 +200,6 @@ def filter_and_compare(df):
                     image_path = origin_path + fr"dog_pics/{dog}.png"
                     col.image(image_path, caption=dog, use_column_width=True)
                     dog_idx += 1
-
 
 attributes = pd.read_csv(origin_path + r"norm_dog_attributes.csv")
 filter_and_compare(attributes)
