@@ -146,7 +146,7 @@ def display_dog_table(df):
         #         col.markdown("# Breed Details")
         #         image_path = origin_path + fr"dog_pics/{breed_selected}.png"
         #         col.image(image_path, width=500)
-        breed_details_container.markdown("# Breed Details")
+        text_col.markdown("# Breed Details")
         cols = breed_details_container.columns([1, 3, 2.5, 1])
         plot_col = cols[1]
         img_col = cols[2]
@@ -166,7 +166,7 @@ def display_dog_table(df):
                 column.image(image_path, use_column_width=True)
                 column.button(breed, on_click=show_stats, args=(breed,), use_container_width=True)
     breed_details_container = st.container()
-    breed_details_container.empty()
+    text_col = breed_details_container.columns([2,1,2])[1]
     # breed_details_container.markdown(
     #     """
     #     <style>
