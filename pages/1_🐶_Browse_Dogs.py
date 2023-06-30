@@ -8,7 +8,7 @@ from matplotlib.projections.polar import PolarAxes
 from matplotlib.spines import Spine
 from matplotlib.projections import register_projection
 import numpy as np
-from streamlit_modal import Modal
+# from streamlit_modal import Modal
 
 
 st.set_page_config(page_title="Meet Our Dogs!", layout="wide")
