@@ -2,6 +2,7 @@ import streamlit as st
 
 st.set_page_config(page_title="Welcome to Dogly!", layout="centered")
 origin_path = r"D:/Users/yaniv/OneDrive - post.bgu.ac.il/studies/university/Information Visualization/project/Project Code/"
+origin_path = ""
 image_path = origin_path + r"homepage.jpg"
 st.image(image_path)
 
