@@ -166,6 +166,7 @@ def display_dog_table(df):
                 column.image(image_path, use_column_width=True)
                 column.button(breed, on_click=show_stats, args=(breed,), use_container_width=True)
     breed_details_container = st.container()
+    breed_details_container.markdown("---")
     text_col = breed_details_container.columns([2,1,2])[1]
     # breed_details_container.markdown(
     #     """
