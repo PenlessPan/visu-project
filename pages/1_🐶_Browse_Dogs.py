@@ -147,7 +147,9 @@ def display_dog_table(df):
         #         image_path = origin_path + fr"dog_pics/{breed_selected}.png"
         #         col.image(image_path, width=500)
         breed_details_container.markdown("# Breed Details")
-        # breed_selected = col.selectbox("Select a breed:", df)
+        cols = breed_details_container.columns([1, 3, 2.5, 1])
+        plot_col = cols[1]
+        img_col = cols[2]
         image_path = origin_path + fr"dog_pics/{breed_selected}.png"
         img_col.image(image_path, caption=breed_selected, use_column_width=True)
         fig = plot_spider(df, breed_selected)
@@ -164,20 +166,18 @@ def display_dog_table(df):
                 column.image(image_path, use_column_width=True)
                 column.button(breed, on_click=show_stats, args=(breed,), use_container_width=True)
     breed_details_container = st.container()
-    breed_details_container.markdown(
-        """
-        <style>
-        .container {
-            display: flex;
-            flex-direction: row;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-    cols = breed_details_container.columns([1, 3, 2.5, 1])
-    plot_col = cols[1]
-    img_col = cols[2]
+    # breed_details_container.markdown(
+    #     """
+    #     <style>
+    #     .container {
+    #         display: flex;
+    #         flex-direction: row;
+    #     }
+    #     </style>
+    #     """,
+    #     unsafe_allow_html=True
+    # )
+
 
 display_dog_table(df)
 
