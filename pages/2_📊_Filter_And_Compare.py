@@ -3,6 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.graph_objs as go
 
+origin_path = r"D:/Users/yaniv/OneDrive - post.bgu.ac.il/studies/university/Information Visualization/project/Project Code/"
+origin_path = ""
+
 st.set_page_config(page_title="Filter and Compare")
 if not st.session_state:
     st.session_state['Friendliness'] = (1, 5)
@@ -13,10 +16,12 @@ if not st.session_state:
     st.session_state['Maintenance'] = (1, 5)
 attributes_components = {"Friendliness": ["Good with children", "Good with other dogs", "Good with strangers"],
                          "Energy": ["Energy", "Playfulness"],
-                         "Protectiveness":["Protective", "rotectiveness"],
-                         "Life Expectancy": ["Max life expectancy", "Min life expectancy"],
+                         "Protectiveness": ["Protective"],
+                         "Life Expectancy": ["Life Expectancy"],
                          "Maintenance": ["Trainability", "Shedding", "Grooming", "Drooling", "Barking"],
-                         "Size": ["Height", "Weight"]}
+                         "Size": ["Height"]}
+
+
 def stacked_bar_plot(df):
     attributes = list(df.columns)
     attributes.remove("Name")
@@ -48,6 +53,7 @@ def stacked_bar_plot(df):
 
     return fig
 
+
 def lollipop_plot(df, attribute: str):
     ordered_df = df.sort_values(by=attribute)
     my_range = range(1, len(df.index) + 1)
@@ -55,9 +61,9 @@ def lollipop_plot(df, attribute: str):
         return False
 
     # The horizontal plot is made using the hline function
-    fig, ax = plt.subplots(figsize=(8, len(ordered_df)*0.3), nrows=1, ncols=1)
+    fig, ax = plt.subplots(figsize=(8, len(ordered_df) * 0.3), nrows=1, ncols=1)
     plt.hlines(y=my_range, xmin=0, xmax=ordered_df[attribute], color='skyblue')
-    plt.plot(ordered_df[attribute].values, my_range, "o")
+    plt.plot(ordered_df[attribute], my_range, "o")
     plt.xlim(0, 5.1)
     plt.yticks(my_range, ordered_df['Name'])
     plt.grid(True, axis="x")
@@ -74,6 +80,9 @@ def filter_and_compare(df):
     # Display attribute tabs with selectbox for choosing lollipop plots
     attribute_names = list(df.columns)
     attribute_names.remove("Name")
+    "Current Filters:"
+    filters = st.container()
+    filters_str = ""
     reset = st.button("Reset")
     if reset:
         st.session_state['Friendliness'] = (1, 5)
@@ -82,23 +91,23 @@ def filter_and_compare(df):
         st.session_state["Life Expectancy"] = (1, 5)
         st.session_state['Size'] = (1, 5)
         st.session_state['Maintenance'] = (1, 5)
-    "Current Filters:"
-    filters = st.container()
-    filters_str = ""
+    st.markdown("")
 
     # for attribute in attribute_names:
     #     f"{attribute}: {list(st.session_state[attribute])}"
     left, right = st.columns(2)
     selected_attribute = right.selectbox("Select Attribute:", attribute_names)
     # st.markdown(f"# {selected_attribute}")
-    min_val, max_val = left.slider("Choose your preference on a scale of 1 to 5:", key=selected_attribute, min_value=1, max_value=5,
-                                 value=st.session_state[selected_attribute])
+    min_val, max_val = left.slider("Choose your preference on a scale of 1 to 5:", key=selected_attribute, min_value=1,
+                                   max_value=5,
+                                   value=st.session_state[selected_attribute])
     del st.session_state[selected_attribute]
     st.session_state[selected_attribute] = (min_val, max_val)
     for attribute in attribute_names:
         min_val, max_val = st.session_state[attribute]
         filtered_df = filtered_df[
             (filtered_df[attribute] >= min_val) & (filtered_df[attribute] <= max_val)]
+
     for attribute in attribute_names:
         min_val, max_val = st.session_state[attribute]
         if st.session_state[attribute] == (1, 5):
@@ -106,7 +115,8 @@ def filter_and_compare(df):
         else:
             filters_str += f":red[{attribute}: {min_val} - {max_val}] | "
     filters.markdown(filters_str[:-2])
-    filters.markdown("")
+
+    st.markdown(f"**{selected_attribute}** is composed of: {str(attributes_components[selected_attribute])[1:-1]}")
     # Plot lollipop graph using the selected attribute data from `df`
     fig = lollipop_plot(filtered_df, selected_attribute)
     if not fig:
@@ -118,7 +128,7 @@ def filter_and_compare(df):
 
     # Compare button
     st.markdown("---")
-    compare_button = st.button("Compare!")
+    compare_button = st.button("Compare!", use_container_width=True, type="primary")
 
     # Perform comparison and display stacked bar plot
     if compare_button:
@@ -126,7 +136,7 @@ def filter_and_compare(df):
         # Display stacked bar plot using the filtered dataframe
         fig = stacked_bar_plot(filtered_df)
         st.plotly_chart(fig)
-        "Dog images for reference:"
+        f"Dog images for reference:"
         dogs_per_row = 3
         columns_num_def = []
         total_dogs = len(filtered_df)
@@ -137,17 +147,37 @@ def filter_and_compare(df):
         dog_idx = 0
         filtered_df = filtered_df.sort_values("Total", ascending=False)
         for i in range(len(columns_num_def)):
-            cols = st.columns(columns_num_def[i])
-            for col in cols:
+            if columns_num_def[i] == 1:
                 dog = filtered_df.iloc[dog_idx]["Name"]
+<<<<<<< HEAD
+                image_path = origin_path + fr"dog_pics\{dog}.png"
+                st.columns([1, 1, 1])[1].image(image_path, caption=dog, use_column_width=True)
+=======
                 image_path = fr"dog_pics/{dog}.png"
                 col.image(image_path, caption=dog, use_column_width=True)
+>>>>>>> 3abc8845012f17c829c7e2f455390582caf30fe6
                 dog_idx += 1
+            elif columns_num_def[i] == 2:
+                cols = st.columns([1, 3, 1, 3, 1])
+                dog = filtered_df.iloc[dog_idx]["Name"]
+                image_path = origin_path + fr"dog_pics\{dog}.png"
+                cols[1].image(image_path, caption=dog, use_column_width=True)
+                dog_idx += 1
+                dog = filtered_df.iloc[dog_idx]["Name"]
+                image_path = origin_path + fr"dog_pics\{dog}.png"
+                cols[3].image(image_path, caption=dog, use_column_width=True)
+            else:
+                cols = st.columns(columns_num_def[i])
+                for col in cols:
+                    dog = filtered_df.iloc[dog_idx]["Name"]
+                    image_path = origin_path + fr"dog_pics\{dog}.png"
+                    col.image(image_path, caption=dog, use_column_width=True)
+                    dog_idx += 1
 
         # for i in range(0, len(filtered_df), 6):
         #     st.image(filtered_df.iloc[i]['Image'], width=200)
         # st.columns()
 
 
-attributes = pd.read_csv(r"norm_dog_attributes.csv")
+attributes = pd.read_csv(origin_path + r"norm_dog_attributes.csv")
 filter_and_compare(attributes)

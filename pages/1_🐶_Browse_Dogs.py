@@ -8,9 +8,13 @@ from matplotlib.projections.polar import PolarAxes
 from matplotlib.spines import Spine
 from matplotlib.projections import register_projection
 import numpy as np
+from streamlit_modal import Modal
+
 
 st.set_page_config(page_title="Meet Our Dogs!", layout="wide")
-df = pd.read_csv(r"norm_dog_attributes.csv")
+origin_path = r"D:/Users/yaniv/OneDrive - post.bgu.ac.il/studies/university/Information Visualization/project/Project Code/"
+origin_path = ""
+df = pd.read_csv(origin_path + "norm_dog_attributes.csv")
 
 # Function to create spider plots
 def radar_factory(num_vars, frame='polygon'):
@@ -114,7 +118,9 @@ def plot_spider(df, selected_breed):
     ax.plot(theta, data)
     ax.fill(theta, data, alpha=0.45)
     ax.set_varlabels(attribute_names)
-    ax.tick_params(axis='x', which='major', pad=9, labelsize=9)
+    ax.tick_params(axis='x', which='major', pad=9, labelsize=9, grid_color="black", grid_alpha=0.3)
+    ax.tick_params(axis='y', pad=5, labelsize=8.3, direction='in', grid_color="black", grid_alpha=0.3)
+    ax.set_rmax(5)
     ax.set_rgrids([1, 2, 3, 4, 5])
     ax.set_rlabel_position(0)
     ax.set_title(selected_breed)
@@ -128,13 +134,24 @@ def display_dog_table(df):
     num_columns = 10  # Adjust the number of columns based on the desired width
     num_rows = len(df) // num_columns + 1
     def show_stats(breed_selected):
-        with breed_details_container:
-            col.markdown("# Breed Details")
-            # breed_selected = col.selectbox("Select a breed:", df)
-            image_path = fr"dog_pics/{breed_selected}.png"
-            col.image(image_path, width=500)
-            fig = plot_spider(df, breed_selected)
-            col.pyplot(fig)
+        # modal = Modal("Demo Modal", 0)
+        # modal.open()
+        # with modal.container():
+        #     col = st.columns(2)
+        #     with col[0]:
+        #         col.markdown("# Breed Stats")
+        #         fig = plot_spider(df, breed_selected)
+        #         col.pyplot(fig)
+        #     with col[1]:
+        #         col.markdown("# Breed Details")
+        #         image_path = origin_path + fr"dog_pics/{breed_selected}.png"
+        #         col.image(image_path, width=500)
+        col.markdown("# Breed Details")
+        # breed_selected = col.selectbox("Select a breed:", df)
+        image_path = fr"D:/Users/yaniv/OneDrive - post.bgu.ac.il/studies/university/Information Visualization/project/Project Code/dog_pics/{breed_selected}.png"
+        col.image(image_path, width=500)
+        fig = plot_spider(df, breed_selected)
+        col.pyplot(fig)
     # Create a grid layout with two columns
     table_container = st.container()
     # Display the table with dog breed images and names
@@ -143,7 +160,7 @@ def display_dog_table(df):
             breed_row = df[row * num_columns: (row + 1) * num_columns]["Name"]
             breed_columns = st.columns(num_columns)
             for breed, column in zip(breed_row, breed_columns):
-                image_path = fr"dog_pics/{breed}.png"
+                image_path = origin_path + fr"dog_pics/{breed}.png"
                 column.image(image_path, use_column_width=True)
                 column.button(breed, on_click=show_stats, args=(breed,), use_container_width=True)
     breed_details_container = st.container()
