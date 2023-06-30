@@ -31,7 +31,14 @@ def stacked_bar_plot(df):
 
     # Sort the DataFrame by the total height in descending order
     df_sorted = df.sort_values('Total', ascending=False)
-
+    # define color palette for the bar plot
+    palette = {'Maintenance': px.colors.qualitative.Plotly[4],
+               'Size': px.colors.qualitative.G10[5],
+               'Life Expectancy': px.colors.qualitative.Plotly[6],
+               'Protectiveness': px.colors.qualitative.Plotly[9],
+               'Energy': px.colors.qualitative.Plotly[2],
+               'Friendliness': px.colors.qualitative.Plotly[3],
+               }
     # Create a stacked bar plot with sorted data
     fig = go.Figure()
 
@@ -39,7 +46,17 @@ def stacked_bar_plot(df):
         fig.add_trace(go.Bar(
             x=df_sorted["Name"],
             y=df_sorted[attribute],
-            name=attribute
+            marker_color=palette[attribute],
+            name=attribute,
+            hovertemplate='<b>%{x}</b><br>' +
+                          '%{text}<br>' +
+                          'Total: %{customdata}' +
+                          '<extra></extra>'
+            ,
+            customdata=df_sorted["Total"].apply(round, args=(3,)),
+            text=[f'{attribute}: {round(y, 3)}' for y in df_sorted[attribute]],
+            textposition='auto',
+            textfont=dict(color='rgba(0, 0, 0, 0)')  # Make text transparent
         ))
 
     fig.update_layout(
@@ -53,23 +70,37 @@ def stacked_bar_plot(df):
 
     return fig
 
-
 def lollipop_plot(df, attribute: str):
     ordered_df = df.sort_values(by=attribute)
-    my_range = range(1, len(df.index) + 1)
-    if len(ordered_df) == 0:
-        return False
-
-    # The horizontal plot is made using the hline function
-    fig, ax = plt.subplots(figsize=(8, len(ordered_df) * 0.3), nrows=1, ncols=1)
-    plt.hlines(y=my_range, xmin=0, xmax=ordered_df[attribute], color='skyblue')
-    plt.plot(ordered_df[attribute].values, my_range, "o")
-    plt.xlim(0, 5.1)
-    plt.yticks(my_range, ordered_df['Name'])
-    plt.grid(True, axis="x")
-    plt.title = "A vertical lolipop plot"
-    plt.xlabel(f'{attribute} Score')
-    plt.ylabel('Breed Names')
+    fig = go.Figure(go.Bar(
+        x=ordered_df[attribute].values,
+        y=ordered_df['Name'],
+        orientation='h',
+        width=0.01,
+        marker_color="#60b4ff",
+        hoverinfo="skip"))
+    fig.add_scatter(x=ordered_df[attribute].apply(round, args=(3,)).values,
+                    y=ordered_df['Name'],
+                    mode='markers',
+                    marker=dict(size=10),
+                    marker_color="#ff4b4b",
+                    hovertemplate='<b>%{y}</b><br>' +
+                                  attribute + ': %{x}<br>' +
+                                  '<extra></extra>'
+                    )
+    fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor='rgba(211, 211, 211, 0.5)', tickvals=[1, 2, 3, 4, 5],
+                     linecolor='black', linewidth=1, mirror=True)
+    fig.update_yaxes(linecolor='black', linewidth=1, mirror=True)
+    fig.update_layout(
+        height=200 + 40 * (len(ordered_df) - 1),
+        # height=5000,
+        xaxis=dict(linecolor='white', linewidth=1, title_font=dict(size=14)),
+        yaxis=dict(linecolor='white', linewidth=1, title_font=dict(size=14), tickfont=dict(size=14)),
+        plot_bgcolor='black',
+        xaxis_title=f'{attribute} Rating',
+        yaxis_title='Breed Names',
+        showlegend=False
+    )
     return fig
 
 
@@ -115,15 +146,15 @@ def filter_and_compare(df):
         else:
             filters_str += f":red[{attribute}: {min_val} - {max_val}] | "
     filters.markdown(filters_str[:-2])
-
-    st.markdown(f"**{selected_attribute}** is composed of: {str(attributes_components[selected_attribute])[1:-1]}")
+    st.markdown(f"""**{selected_attribute}** is composed of: {str(attributes_components[selected_attribute])[1:-1]}""")
     # Plot lollipop graph using the selected attribute data from `df`
     fig = lollipop_plot(filtered_df, selected_attribute)
     if not fig:
         st.markdown("# No dog is good enough for you:cry:")
         return
     # cols = st.columns([2,3,2])
-    st.pyplot(fig)
+    # st.pyplot(fig)
+    st.plotly_chart(fig)
     # cols[1].pyplot(fig)
 
     # Compare button
@@ -168,10 +199,6 @@ def filter_and_compare(df):
                     image_path = origin_path + fr"dog_pics/{dog}.png"
                     col.image(image_path, caption=dog, use_column_width=True)
                     dog_idx += 1
-
-        # for i in range(0, len(filtered_df), 6):
-        #     st.image(filtered_df.iloc[i]['Image'], width=200)
-        # st.columns()
 
 
 attributes = pd.read_csv(origin_path + r"norm_dog_attributes.csv")

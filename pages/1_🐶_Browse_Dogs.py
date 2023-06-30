@@ -131,21 +131,9 @@ def plot_spider(df, selected_breed):
 def display_dog_table(df):
     st.markdown("# Meet Our Dogs!")
 
-    num_columns = 10  # Adjust the number of columns based on the desired width
+    num_columns = 10  
     num_rows = len(df) // num_columns + 1
     def show_stats(breed_selected):
-        # modal = Modal("Demo Modal", 0)
-        # modal.open()
-        # with modal.container():
-        #     col = st.columns(2)
-        #     with col[0]:
-        #         col.markdown("# Breed Stats")
-        #         fig = plot_spider(df, breed_selected)
-        #         col.pyplot(fig)
-        #     with col[1]:
-        #         col.markdown("# Breed Details")
-        #         image_path = origin_path + fr"dog_pics/{breed_selected}.png"
-        #         col.image(image_path, width=500)
         text_col.markdown("# Breed Details")
         cols = breed_details_container.columns([1, 3, 2.5, 1])
         plot_col = cols[1]
@@ -168,17 +156,6 @@ def display_dog_table(df):
     breed_details_container = st.container()
     breed_details_container.markdown("---")
     text_col = breed_details_container.columns([2,1,2])[1]
-    # breed_details_container.markdown(
-    #     """
-    #     <style>
-    #     .container {
-    #         display: flex;
-    #         flex-direction: row;
-    #     }
-    #     </style>
-    #     """,
-    #     unsafe_allow_html=True
-    # )
 
 
 display_dog_table(df)
