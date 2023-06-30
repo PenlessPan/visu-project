@@ -146,13 +146,12 @@ def display_dog_table(df):
         #         col.markdown("# Breed Details")
         #         image_path = origin_path + fr"dog_pics/{breed_selected}.png"
         #         col.image(image_path, width=500)
-        col.markdown("# Breed Details")
+        st.markdown("# Breed Details")
         # breed_selected = col.selectbox("Select a breed:", df)
         image_path = origin_path + fr"dog_pics/{breed_selected}.png"
-        img_col = col.columns([1,2,1])[1]
         img_col.image(image_path, caption=breed_selected, use_column_width=True)
         fig = plot_spider(df, breed_selected)
-        col.pyplot(fig)
+        plot_col.pyplot(fig)
     # Create a grid layout with two columns
     table_container = st.container()
     # Display the table with dog breed images and names
@@ -176,8 +175,9 @@ def display_dog_table(df):
         """,
         unsafe_allow_html=True
     )
-    cols = breed_details_container.columns([2,3,2])
-    col = cols[1]
+    cols = breed_details_container.columns([1, 3, 2.5, 1])
+    plot_col = cols[1]
+    img_col = cols[2]
 
 display_dog_table(df)
 
