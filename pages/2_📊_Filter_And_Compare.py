@@ -63,7 +63,7 @@ def lollipop_plot(df, attribute: str):
     # The horizontal plot is made using the hline function
     fig, ax = plt.subplots(figsize=(8, len(ordered_df) * 0.3), nrows=1, ncols=1)
     plt.hlines(y=my_range, xmin=0, xmax=ordered_df[attribute], color='skyblue')
-    plt.plot(ordered_df[attribute], my_range, "o")
+    plt.plot(ordered_df[attribute].values, my_range, "o")
     plt.xlim(0, 5.1)
     plt.yticks(my_range, ordered_df['Name'])
     plt.grid(True, axis="x")
