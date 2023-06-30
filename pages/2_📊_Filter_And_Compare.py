@@ -3,7 +3,6 @@ import pandas as pd
 import plotly.graph_objs as go
 import plotly.express as px
 
-origin_path = r"D:/Users/yaniv/OneDrive - post.bgu.ac.il/studies/university/Information Visualization/project/Project Code/"
 origin_path = ""
 
 st.set_page_config(page_title="Filter and Compare")
@@ -31,6 +30,7 @@ def stacked_bar_plot(df):
 
     # Sort the DataFrame by the total height in descending order
     df_sorted = df.sort_values('Total', ascending=False)
+
     # define color palette for the bar plot
     palette = {'Maintenance': px.colors.qualitative.Plotly[4],
                'Size': px.colors.qualitative.G10[5],
@@ -39,6 +39,7 @@ def stacked_bar_plot(df):
                'Energy': px.colors.qualitative.Plotly[2],
                'Friendliness': px.colors.qualitative.Plotly[3],
                }
+    
     # Create a stacked bar plot with sorted data
     fig = go.Figure()
 
@@ -94,8 +95,6 @@ def lollipop_plot(df, attribute: str):
     fig.update_yaxes(linecolor='black', linewidth=1, mirror=True)
     fig.update_layout(
         height=200 + 40 * (len(ordered_df) - 1),
-        # width=1000,
-        # height=5000,
         xaxis=dict(linecolor='white', linewidth=1, title_font=dict(size=14)),
         yaxis=dict(linecolor='white', linewidth=1, title_font=dict(size=14), tickfont=dict(size=14)),
         plot_bgcolor='black',
@@ -107,10 +106,15 @@ def lollipop_plot(df, attribute: str):
     return fig
 
 
-# Step 2 and 3: Filter dog breeds and display stacked bar plot
 def filter_and_compare(df):
     st.markdown("# Filter Dog Breeds")
+    st.markdown("##### Here you can use the cross-filtering feature to filter out dogs which less suit you in whichever attributes you want!")
+    st.markdown("###### You can filter using the slider below and it will be persistant! (meaning the filter will stay even after selecting a different attribute to filter)")
+    st.markdown("###### After you reach a group of breed which you are satisfied with (our recommendation is between 3 to 6 dogs) you can go ahead and press the big red 'compare!' button below to compare the breeds better.")
+    st.markdown("use the 'reset' button to reset all of the filters and get back to the initial state.")
+    st.markdown("tip: attributes colored :blue[blue] are ones that have yet to be filtered while :red[red] ones have been changed, quite helpful for keeping track:wink:")
     filtered_df = df.copy()
+
     # Display attribute tabs with selectbox for choosing lollipop plots
     attribute_names = list(df.columns)
     attribute_names.remove("Name")
@@ -127,7 +131,6 @@ def filter_and_compare(df):
         st.session_state['Maintenance'] = (1, 5)
     st.markdown("")
 
-    # for attribute in attribute_names:
     left, right = st.columns(2)
     selected_attribute = right.selectbox("Select Attribute:", attribute_names)
     min_val, max_val = left.slider("Choose your preference on a scale of 1 to 5:", key=selected_attribute, min_value=1,
@@ -153,10 +156,8 @@ def filter_and_compare(df):
     if not fig:
         st.markdown("# No dog is good enough for you:cry:")
         return
-    # cols = st.columns([2,3,2])
-    # st.pyplot(fig)
     st.plotly_chart(fig)
-    # cols[1].pyplot(fig)
+
 
     # Compare button
     st.markdown("---")
@@ -165,6 +166,8 @@ def filter_and_compare(df):
     # Perform comparison and display stacked bar plot
     if compare_button:
         st.markdown("# Comparing Dog Breeds")
+        st.markdown("#### Here you have your top breeds side by side for your convenience.")
+        st.markdown("clicking an attribute on the right hand side will remove it from the graph while double-clicking will isolate it.\n Below are pictures of the breeds for reference.")
         # Display stacked bar plot using the filtered dataframe
         fig = stacked_bar_plot(filtered_df)
         st.plotly_chart(fig)

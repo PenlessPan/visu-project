@@ -8,12 +8,13 @@ from matplotlib.projections.polar import PolarAxes
 from matplotlib.spines import Spine
 from matplotlib.projections import register_projection
 import numpy as np
-# from streamlit_modal import Modal
+import time
+from streamlit_modal import Modal
 
 
 st.set_page_config(page_title="Meet Our Dogs!", layout="wide")
-origin_path = r"D:/Users/yaniv/OneDrive - post.bgu.ac.il/studies/university/Information Visualization/project/Project Code/"
 origin_path = ""
+
 df = pd.read_csv(origin_path + "norm_dog_attributes.csv")
 
 # Function to create spider plots
@@ -127,13 +128,14 @@ def plot_spider(df, selected_breed):
     return fig
 
 
-# Step 1: Display table with dog breed images and names
+# Display table with dog breed images and names
 def display_dog_table(df):
     st.markdown("# Meet Our Dogs!")
-
-    num_columns = 10  
+    st.markdown("Here you can browse through our dog breeds and look at the properties of breeds that peak your interest!\n\n Please take note that after selecting a breed you need to scroll to the bottom of the page in order to see the details.")
+    num_columns = 10
     num_rows = len(df) // num_columns + 1
     def show_stats(breed_selected):
+        st.sidebar.info("Please scroll down to look at the details!")
         text_col.markdown("# Breed Details")
         cols = breed_details_container.columns([1, 3, 2.5, 1])
         plot_col = cols[1]
@@ -142,7 +144,7 @@ def display_dog_table(df):
         img_col.image(image_path, caption=breed_selected, use_column_width=True)
         fig = plot_spider(df, breed_selected)
         plot_col.pyplot(fig)
-    # Create a grid layout with two columns
+
     table_container = st.container()
     # Display the table with dog breed images and names
     with table_container:
@@ -156,7 +158,6 @@ def display_dog_table(df):
     breed_details_container = st.container()
     breed_details_container.markdown("---")
     text_col = breed_details_container.columns([2,1,2])[1]
-
 
 display_dog_table(df)
 

@@ -1,36 +1,35 @@
 import streamlit as st
 
 st.set_page_config(page_title="Welcome to Dogly!", layout="centered")
-origin_path = r"D:/Users/yaniv/OneDrive - post.bgu.ac.il/studies/university/Information Visualization/project/Project Code/"
-origin_path = ""
-image_path = origin_path + r"homepage.jpg"
+image_path = "homepage.jpg"
 st.image(image_path)
 
-# col1, col2, col3 = st.columns([1, 3, 1])
-# with col1:
-#     st.write(' ')
-# with col2:
-#     image_path = ""
-#     st.image(image_path)
-# with col3:
-#     st.write(' ')
+st.markdown("""
+## Hello! Welcome to Dogly!
 
-st.write("# Hello! Dogly will assist you to find which dog breeds to adopt, according to your preferences")
-st.write("### You can see all of our dog breeds and explore their attributes or start your searching right away")
-st.write("### You are welcome to choose what you would like to do using the sidebar")
-st.write("(We recommend to begin with exploring our dogs and then start find your optimal dogs)")
-st.write("")  # leave a blank line
-st.write("#### Data Overview")
-"""
-there are 94 dog breeds, and 6 attributes\n
-The attributes are: \n
-Friendliness, Energy, Protectiveness, Life Expectancy, Size, Maintenance\n
-Some of the attributes are actually derived attributes:\n
-Friendliness: a mean of the attributes "Good with children", "Good with other dogs" and "Good with strangers"\n
-Energy: a mean of the attributes "Energy" and "Playfulness"\n
-Life Expectancy:  a mean of the attributes "Min Life Expectancy" and "Max Life Expectancy"\n
-Size: a mean of the attributes "Min Height Male", "Max Height Male", "Min Height Female", "Max Height Female"\n
-Maintenance: a mean of the attributes "Trainability", "Shedding", "Grooming", "Drooling" and "Barking".
-"""
+### Find Your Ideal Dog Breed!
+
+##### Let Dogly guide you in finding your perfect dog breed. Explore our breeds or start your search right away. Use the sidebar to choose your action.
+
+###### We recommend starting your journey by browsing through the breeds to familiarize yourself with the unique characteristics each breed offers. This will help you better understand your preferences and make an informed decision.
+
+Data Overview: Get to Know Our Dog Breeds
+
+Dogly is home to 94 unique dog breeds, each with its own set of distinctive qualities. To help you make an informed decision, we've categorized each breed based on six key attributes:
+
+- Friendliness: This attribute reflects how well a breed gets along with children, other dogs, and strangers. (Derived from "Good with children," "Good with other dogs," and "Good with strangers")
+- Energy: It represents the energy level and playfulness of a breed. (Derived from "Energy" and "Playfulness")
+- Protectiveness: This attribute gauges the level of protection a breed provides. (Derived from "Protectiveness")
+- Life Expectancy: It provides an estimate of the average lifespan for each breed. (Derived from "Min Life Expectancy" and "Max Life Expectancy")
+- Size: This attribute considers the average height of male and female dogs within a breed. (Derived from "Min Height Male," "Max Height Male," "Min Height Female," and "Max Height Female")
+- Maintenance: It encompasses trainability, shedding, grooming, drooling, and barking tendencies. (Derived from said features)
+
+We have carefully derived and normalized these attributes to be on a scale from 1 to 5, allowing for easier comparison between breeds.
+
+It's important to note that the attribute ratings are relative only to the breeds within our dataset. For instance, the smallest breed within our dataset will receive a size score of 1, even if smaller breeds exist outside our dataset.
+
+### Feel free to explore the attributes, filter the breeds, and find your ideal companion on Dogly!
+
+""")
 
 st.sidebar.success("Select a feature from above!")
