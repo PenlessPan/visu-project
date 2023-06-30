@@ -151,8 +151,6 @@ def filter_and_compare(df):
                 dog = filtered_df.iloc[dog_idx]["Name"]
                 image_path = origin_path + fr"dog_pics/{dog}.png"
                 st.columns([1, 1, 1])[1].image(image_path, caption=dog, use_column_width=True)
-                image_path = fr"dog_pics/{dog}.png"
-                col.image(image_path, caption=dog, use_column_width=True)
                 dog_idx += 1
             elif columns_num_def[i] == 2:
                 cols = st.columns([1, 3, 1, 3, 1])
