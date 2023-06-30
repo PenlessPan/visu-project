@@ -93,12 +93,14 @@ def lollipop_plot(df, attribute: str):
     fig.update_yaxes(linecolor='black', linewidth=1, mirror=True)
     fig.update_layout(
         height=200 + 40 * (len(ordered_df) - 1),
+        # width=1000,
         # height=5000,
         xaxis=dict(linecolor='white', linewidth=1, title_font=dict(size=14)),
         yaxis=dict(linecolor='white', linewidth=1, title_font=dict(size=14), tickfont=dict(size=14)),
         plot_bgcolor='black',
         xaxis_title=f'{attribute} Rating',
         yaxis_title='Breed Names',
+        xaxis_range=[0, 5.1],
         showlegend=False
     )
     return fig
