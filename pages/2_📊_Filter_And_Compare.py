@@ -74,6 +74,8 @@ def stacked_bar_plot(df):
 
 def lollipop_plot(df, attribute: str):
     ordered_df = df.sort_values(by=attribute)
+    if len(ordered_df) == 0:
+        return False
     fig = go.Figure(go.Bar(
         x=ordered_df[attribute].values,
         y=ordered_df['Name'],
